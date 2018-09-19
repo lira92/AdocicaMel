@@ -1,0 +1,10 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "ProductsCatalogDb": "mongodb://adocicamel-products:Dj7EEFWo0ZUc3UDSctabbKTTZnSsUWhsrmYsWGcGVcDiWhHaBIILA9s4eVOsKq5aIgncraFwovZt0Hh1wvabtA==@adocicamel-products.documents.azure.com:10255/?ssl=true&replicaSet=globaldb",
+    "AzureWebJobsDashboard": "",
+    "AzureWebJobsStorage": "",
+    "VendorsApi": "https://adocicamel.azure-api.net/",
+    "VendorsSubscriptionKey": "b19ad0ad208345e986dcbe1abe38fbbb"
+  }
+}

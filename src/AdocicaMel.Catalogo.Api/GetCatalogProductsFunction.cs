@@ -1,59 +1,41 @@
-
-using System.IO;
+using AdocicaMel.Catalog.Api.Models;
+using AdocicaMel.Catalog.Api.ViewModels;
+using AdocicaMel.Catalog.Infra.Context;
+using AdocicaMel.Catalog.Infra.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.WebJobs.Host;
-using Newtonsoft.Json;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
-using MongoDB.Driver;
-using AdocicaMel.Catalogo.Api.Models;
+using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
-using AdocicaMel.Catalogo.Api.ViewModels;
+using MongoDB.Driver;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace AdocicaMel.Catalogo.Api
+namespace AdocicaMel.Catalog.Api
 {
     public static class GetCatalogProductsFunction
     {
         [FunctionName("GetCatalogProductsFunction")]
-        public static IActionResult Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)]HttpRequest req, ILogger log, ExecutionContext context)
+        public static IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]HttpRequest req, ILogger log, ExecutionContext context)
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(context.FunctionAppDirectory)
-                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
+            var catalogContext = new CatalogContext();
+            var productRepository = new ProductRepository(catalogContext);
 
-            var connectionString = config["ProductsCatalogDb"];
-            var mongoClient = new MongoClient(connectionString);
+            var products = productRepository.GetProducts();
 
-            var db = mongoClient.GetDatabase("catalog");
-
-            var collection = db.GetCollection<Product>("products");
-
-            var products = collection.Find(new BsonDocument()).ToList();
-
-            var listResponse = new List<ListCatalogProductsViewModel>();
-
-            foreach(var product in products)
+            var response = products.AsQueryable().Select(x => new CatalogProductViewModel
             {
-                listResponse.Add(
-                    new ListCatalogProductsViewModel
-                    {
-                        Id = product.Id,
-                        Price = product.Price,
-                        ProductDescription = product.ProductVendorData.ProductDescription,
-                        ProductName = product.ProductVendorData.ProductName,
-                        ProductImage = product.ProductVendorData.ProductImage,
-                        Tags = product.Tags
-                    }
-                );
-            }
+                Id = x.Id,
+                Price = x.Price,
+                ProductDescription = x.ProductVendorData.ProductDescription,
+                ProductImage = x.ProductVendorData.ProductImage,
+                ProductName = x.ProductVendorData.ProductName,
+                Tags = x.Tags
+            }).ToList();
 
-            return new OkObjectResult(listResponse);
+            return new OkObjectResult(response);
         }
     }
 }

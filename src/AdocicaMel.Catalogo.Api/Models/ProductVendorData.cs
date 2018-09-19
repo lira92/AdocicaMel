@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AdocicaMel.Catalogo.Api.Models
+namespace AdocicaMel.Catalog.Api.Models
 {
     public class ProductVendorData
     {

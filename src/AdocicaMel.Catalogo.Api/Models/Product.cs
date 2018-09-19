@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AdocicaMel.Catalogo.Api.Models
+namespace AdocicaMel.Catalog.Api.Models
 {
     public class Product
     {

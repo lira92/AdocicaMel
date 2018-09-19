@@ -1,10 +1,9 @@
-﻿using System;
+﻿using AdocicaMel.Core.Domain.Commands;
 using System.Collections.Generic;
-using System.Text;
 
-namespace AdocicaMel.Catalog.Api.ViewModels
+namespace AdocicaMel.Catalog.Domain.Commands
 {
-    public class ImportProductViewModel
+    public class ImportProductCommand : ICommand
     {
         public string Vendor { get; set; }
         public string ProductIdentifier { get; set; }

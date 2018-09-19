@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AdocicaMel.Catalogo.Api.ViewModels
+namespace AdocicaMel.Catalog.Api.ViewModels
 {
-    public class ListCatalogProductsViewModel
+    public class CatalogProductViewModel
     {
         public Guid Id { get; set; }
         public string ProductName { get; set; }

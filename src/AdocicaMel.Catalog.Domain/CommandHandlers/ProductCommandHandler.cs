@@ -23,6 +23,11 @@ namespace AdocicaMel.Catalog.Domain.CommandHandlers
             var productVendorData = _productVendorRepository
                 .GetProductDataFromVendor(command.Vendor, command.ProductIdentifier);
 
+            if (productVendorData == null)
+            {
+                throw new Exception("Não foi possível recuperar o produto do fornecedor");
+            }
+
             var product = new Product(
                 command.Price,
                 command.Vendor,

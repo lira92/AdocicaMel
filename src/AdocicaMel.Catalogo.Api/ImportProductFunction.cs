@@ -1,19 +1,16 @@
-using System.IO;
+using AdocicaMel.Catalog.Domain.CommandHandlers;
+using AdocicaMel.Catalog.Domain.Commands;
+using AdocicaMel.Catalog.Infra.Context;
+using AdocicaMel.Catalog.Infra.Http;
+using AdocicaMel.Catalog.Infra.Repositories;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Configuration;
-using MongoDB.Driver;
 using System;
-using RestSharp;
-using AdocicaMel.Catalog.Domain.Commands;
-using AdocicaMel.Catalog.Domain.CommandHandlers;
-using AdocicaMel.Catalog.Infra.Context;
-using AdocicaMel.Catalog.Infra.Repositories;
-using AdocicaMel.Catalog.Infra.Http;
+using System.IO;
 
 namespace AdocicaMel.Catalog.Api
 {
@@ -22,20 +19,21 @@ namespace AdocicaMel.Catalog.Api
         [FunctionName("ImportarProdutos")]
         public static IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]HttpRequest req,
-            TraceWriter log,
+            ILogger log,
             ExecutionContext context
         )
         {
             string requestBody = new StreamReader(req.Body).ReadToEnd();
             var command = JsonConvert.DeserializeObject<ImportProductCommand>(requestBody);
+            var authorization = req.Headers["Authorization"];
 
-            if(command == null)
+            if (command == null)
             {
                 return new BadRequestObjectResult("Dados inválidos");
             }
 
             var catalogContext = new CatalogContext();
-            var productVendorRepository = new ProductVendorRepository(new VendorsApi());
+            var productVendorRepository = new ProductVendorRepository(new VendorsApi(authorization));
             var productRepository = new ProductRepository(catalogContext);
             var handler = new ProductCommandHandler(productVendorRepository, productRepository);
 
@@ -46,10 +44,10 @@ namespace AdocicaMel.Catalog.Api
             }
             catch (Exception error)
             {
-                log.Error("Erro ao salvar produto", error);
+                log.LogError("Erro ao salvar produto", error);
                 return new BadRequestObjectResult("Ocorreu um erro ao importar o produto");
             }
-           
+
 
             /*var config = new ConfigurationBuilder()
                 .SetBasePath(context.FunctionAppDirectory)

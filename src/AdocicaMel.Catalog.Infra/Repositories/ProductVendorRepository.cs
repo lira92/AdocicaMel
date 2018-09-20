@@ -3,6 +3,7 @@ using AdocicaMel.Catalog.Domain.ValueObjects;
 using AdocicaMel.Catalog.Infra.Dto;
 using AdocicaMel.Catalog.Infra.Http;
 using RestSharp;
+using System.Net;
 
 namespace AdocicaMel.Catalog.Infra.Repositories
 {
@@ -23,12 +24,16 @@ namespace AdocicaMel.Catalog.Infra.Repositories
             };
 
             var response = _vendorsApi.Execute<ProductVendorResponseDto>(request);
+            if(response.StatusCode != HttpStatusCode.OK)
+            {
+                return null;
+            }
 
             return new ProductVendorData(
-                productName: response.ProductName,
-                productDescription: response.ProductDescription,
-                productImage: response.ProductImage,
-                productCost: response.Price
+                productName: response.Data.ProductName,
+                productDescription: response.Data.ProductDescription,
+                productImage: response.Data.ProductImage,
+                productCost: response.Data.Price
             );
         }
     }

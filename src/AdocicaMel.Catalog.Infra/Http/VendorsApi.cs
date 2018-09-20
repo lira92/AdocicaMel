@@ -1,20 +1,23 @@
 ﻿using RestSharp;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AdocicaMel.Catalog.Infra.Http
 {
     public class VendorsApi
     {
+        private readonly string _authorization;
         const string BaseUrl = "https://adocicamel.azure-api.net/";
-        private readonly string _secretKey = "b19ad0ad208345e986dcbe1abe38fbbb";
 
-        public T Execute<T>(RestRequest request) where T : new()
+        public VendorsApi(string authorization)
+        {
+            _authorization = authorization;
+        }
+
+        public IRestResponse<T> Execute<T>(RestRequest request) where T : new()
         {
             var client = new RestClient();
             client.BaseUrl = new Uri(BaseUrl);
-            request.AddHeader("Ocp-Apim-Subscription-Key", _secretKey);
+            request.AddHeader("Authorization", _authorization);
 
             var response = client.Execute<T>(request);
 
@@ -24,7 +27,7 @@ namespace AdocicaMel.Catalog.Infra.Http
                 var vendorsApiException = new ApplicationException(message, response.ErrorException);
                 throw vendorsApiException;
             }
-            return response.Data;
+            return response;
         }
     }
 }

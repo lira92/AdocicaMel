@@ -7,13 +7,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{9566
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdocicaMel.Catalog.Api", "src\AdocicaMel.Catalogo.Api\AdocicaMel.Catalog.Api.csproj", "{7584DA0B-2878-4AD6-A67B-BCE8B19C48ED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdocicaMel.Catalog.Domain", "AdocicaMel.Catalog.Domain\AdocicaMel.Catalog.Domain.csproj", "{45424169-B559-44C7-96F5-AA7372DF151B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdocicaMel.Catalog.Domain", "src\AdocicaMel.Catalog.Domain\AdocicaMel.Catalog.Domain.csproj", "{45424169-B559-44C7-96F5-AA7372DF151B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{DE08BAAC-2937-4361-8849-D98B43116374}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdocicaMel.Core.Domain", "AdocicaMel.Core.Domain\AdocicaMel.Core.Domain.csproj", "{8919731E-2076-4686-BBDE-989827C8A2A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdocicaMel.Core.Domain", "src\AdocicaMel.Core.Domain\AdocicaMel.Core.Domain.csproj", "{8919731E-2076-4686-BBDE-989827C8A2A0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdocicaMel.Catalog.Infra", "AdocicaMel.Catalog.Infra\AdocicaMel.Catalog.Infra.csproj", "{2ED4572A-A780-43EE-B318-ECA2027D6A35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdocicaMel.Catalog.Infra", "src\AdocicaMel.Catalog.Infra\AdocicaMel.Catalog.Infra.csproj", "{2ED4572A-A780-43EE-B318-ECA2027D6A35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

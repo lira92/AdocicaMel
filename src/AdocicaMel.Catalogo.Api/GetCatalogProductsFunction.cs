@@ -1,4 +1,3 @@
-using AdocicaMel.Catalog.Api.Models;
 using AdocicaMel.Catalog.Api.ViewModels;
 using AdocicaMel.Catalog.Infra.Context;
 using AdocicaMel.Catalog.Infra.Repositories;
@@ -6,11 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace AdocicaMel.Catalog.Api

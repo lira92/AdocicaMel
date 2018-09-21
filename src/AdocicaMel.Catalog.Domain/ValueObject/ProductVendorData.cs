@@ -1,4 +1,5 @@
 ﻿using AdocicaMel.Core.Domain.ValueObjects;
+using Flunt.Validations;
 
 namespace AdocicaMel.Catalog.Domain.ValueObjects
 {
@@ -11,6 +12,13 @@ namespace AdocicaMel.Catalog.Domain.ValueObjects
             ProductDescription = productDescription;
             ProductImage = productImage;
             ProductCost = productCost;
+
+            AddNotifications(
+                new Contract()
+                    .Requires()
+                    .IsNotNullOrEmpty(ProductName, nameof(ProductName), "O produto deve possuir um nome")
+                    .IsGreaterThan(ProductCost, 0, nameof(productCost), "O produto deve ter um custo")
+            );
         }
 
         public string ProductName { get; private set; }

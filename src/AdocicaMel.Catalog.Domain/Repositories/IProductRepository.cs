@@ -7,5 +7,6 @@ namespace AdocicaMel.Catalog.Domain.Repositories
     {
         void Create(Product product);
         IEnumerable<Product> GetProducts();
+        Product GetProductByVendorAndProductIdentifier(string vendor, string productIdentifier);
     }
 }

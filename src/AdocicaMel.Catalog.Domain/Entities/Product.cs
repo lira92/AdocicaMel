@@ -1,14 +1,17 @@
-﻿using AdocicaMel.Catalog.Domain.ValueObjects;
+﻿using AdocicaMel.Catalog.Domain.Validators;
+using AdocicaMel.Catalog.Domain.ValueObjects;
 using AdocicaMel.Core.Domain.Entities;
+using Flunt.Validations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AdocicaMel.Catalog.Domain.Entities
 {
     public class Product : Entity
     {
-        public Product(decimal price, string vendor, 
-            string productVendorIdentifier, IEnumerable<string> tags, 
+        public Product(decimal price, string vendor,
+            string productVendorIdentifier, IEnumerable<string> tags,
             ProductVendorData productVendorData)
         {
             Price = price;
@@ -18,6 +21,10 @@ namespace AdocicaMel.Catalog.Domain.Entities
             LastSync = DateTime.Now;
             Tags = tags;
             ProductVendorData = productVendorData;
+
+            var contract = new ProductContract(Vendor, ProductVendorIdentifier, Price, Tags);
+
+            AddNotifications(contract, productVendorData);
         }
 
         public decimal Price { get; private set; }

@@ -1,12 +1,14 @@
 ﻿using AdocicaMel.Catalog.Domain.Commands;
 using AdocicaMel.Catalog.Domain.Entities;
 using AdocicaMel.Catalog.Domain.Repositories;
+using AdocicaMel.Catalog.Domain.ValueObjects;
 using AdocicaMel.Core.Domain.Commands;
+using Flunt.Notifications;
 using System;
 
 namespace AdocicaMel.Catalog.Domain.CommandHandlers
 {
-    public class ProductCommandHandler : ICommandHandler<ImportProductCommand>
+    public class ProductCommandHandler : Notifiable, ICommandHandler<ImportProductCommand>
     {
         private readonly IProductVendorRepository _productVendorRepository;
         private readonly IProductRepository _productRepository;
@@ -20,14 +22,38 @@ namespace AdocicaMel.Catalog.Domain.CommandHandlers
 
         public void Handle(ImportProductCommand command)
         {
-            var productVendorData = _productVendorRepository
-                .GetProductDataFromVendor(command.Vendor, command.ProductIdentifier);
-
-            if (productVendorData == null)
+            command.Validate();
+            if(command.Invalid)
             {
-                throw new Exception("Não foi possível recuperar o produto do fornecedor");
+                AddNotifications(command);
+                return;
+            }
+            var productAlreadyImported = _productRepository.GetProductByVendorAndProductIdentifier(command.Vendor, command.ProductIdentifier);
+
+            if(productAlreadyImported != null)
+            {
+                AddNotification("Product", "Este produto já foi importado");
+                return;
             }
 
+            ProductVendorData productVendorData = null;
+            try
+            {
+                productVendorData = _productVendorRepository
+                    .GetProductDataFromVendor(command.Vendor, command.ProductIdentifier);
+
+                if (productVendorData == null)
+                {
+                    AddNotification("Product", "Não foi possível recuperar o produto do fornecedor");
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+                AddNotification("Product", "Não foi possível recuperar o produto do fornecedor");
+                return;
+            }
+            
             var product = new Product(
                 command.Price,
                 command.Vendor,
@@ -35,6 +61,13 @@ namespace AdocicaMel.Catalog.Domain.CommandHandlers
                 command.Tags,
                 productVendorData
             );
+
+            AddNotifications(product);
+
+            if(Invalid)
+            {
+                return;
+            }
 
             _productRepository.Create(product);
         }

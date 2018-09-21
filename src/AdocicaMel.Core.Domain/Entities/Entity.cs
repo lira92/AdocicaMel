@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Flunt.Notifications;
+using System;
 
 namespace AdocicaMel.Core.Domain.Entities
 {
-    public abstract class Entity
+    public abstract class Entity : Notifiable
     {
         protected Entity()
         {

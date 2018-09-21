@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdocicaMel.Core.Domain", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdocicaMel.Catalog.Infra", "src\AdocicaMel.Catalog.Infra\AdocicaMel.Catalog.Infra.csproj", "{2ED4572A-A780-43EE-B318-ECA2027D6A35}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdocicaMel.Core.Infra.DI", "src\AdocicaMel.Core.Infra.DI\AdocicaMel.Core.Infra.DI.csproj", "{1622652A-F4ED-4C87-B00A-674EAFC3801C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{2ED4572A-A780-43EE-B318-ECA2027D6A35}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2ED4572A-A780-43EE-B318-ECA2027D6A35}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2ED4572A-A780-43EE-B318-ECA2027D6A35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1622652A-F4ED-4C87-B00A-674EAFC3801C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1622652A-F4ED-4C87-B00A-674EAFC3801C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1622652A-F4ED-4C87-B00A-674EAFC3801C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1622652A-F4ED-4C87-B00A-674EAFC3801C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{45424169-B559-44C7-96F5-AA7372DF151B} = {95662B7A-A94E-4393-BEBF-C08F28D18CFC}
 		{8919731E-2076-4686-BBDE-989827C8A2A0} = {DE08BAAC-2937-4361-8849-D98B43116374}
 		{2ED4572A-A780-43EE-B318-ECA2027D6A35} = {95662B7A-A94E-4393-BEBF-C08F28D18CFC}
+		{1622652A-F4ED-4C87-B00A-674EAFC3801C} = {DE08BAAC-2937-4361-8849-D98B43116374}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9FDE41E6-041F-4B78-97AB-E8ADEF2B1403}

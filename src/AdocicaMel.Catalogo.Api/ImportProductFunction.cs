@@ -1,8 +1,10 @@
 using AdocicaMel.Catalog.Domain.CommandHandlers;
 using AdocicaMel.Catalog.Domain.Commands;
+using AdocicaMel.Catalog.Domain.Repositories;
 using AdocicaMel.Catalog.Infra.Context;
 using AdocicaMel.Catalog.Infra.Http;
 using AdocicaMel.Catalog.Infra.Repositories;
+using AdocicaMel.Core.Infra.DI;
 using Flunt.Notifications;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +24,7 @@ namespace AdocicaMel.Catalog.Api
         [FunctionName("ImportarProdutos")]
         public static IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]HttpRequest req,
+            [Inject]IProductRepository productRepository,
             ILogger log,
             ExecutionContext context
         )
@@ -35,9 +38,7 @@ namespace AdocicaMel.Catalog.Api
                 return new BadRequestObjectResult("Dados inválidos");
             }
 
-            var catalogContext = new CatalogContext();
             var productVendorRepository = new ProductVendorRepository(new VendorsApi(authorization));
-            var productRepository = new ProductRepository(catalogContext);
             var handler = new ProductCommandHandler(productVendorRepository, productRepository);
 
             try

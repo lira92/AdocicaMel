@@ -22,7 +22,8 @@ namespace AdocicaMel.Catalog.Infra.Repositories
 
         public Product GetProductByVendorAndProductIdentifier(string vendor, string productIdentifier)
         {
-            var filter = new FilterDefinitionBuilder<Product>().Where(x => x.Vendor == vendor && x.ProductVendorIdentifier == productIdentifier);
+            var filter = new FilterDefinitionBuilder<Product>()
+                .Where(x => x.Vendor == vendor && x.ProductVendorIdentifier == productIdentifier);
 
             return _context.Products.FindSync(filter).FirstOrDefault();
         }

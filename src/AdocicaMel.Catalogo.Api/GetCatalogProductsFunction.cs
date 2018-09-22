@@ -1,6 +1,6 @@
 using AdocicaMel.Catalog.Api.ViewModels;
-using AdocicaMel.Catalog.Infra.Context;
-using AdocicaMel.Catalog.Infra.Repositories;
+using AdocicaMel.Catalog.Domain.Repositories;
+using AdocicaMel.Core.Infra.DI;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -14,11 +14,11 @@ namespace AdocicaMel.Catalog.Api
     public static class GetCatalogProductsFunction
     {
         [FunctionName("GetCatalogProductsFunction")]
-        public static IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]HttpRequest req, ILogger log, ExecutionContext context)
+        public static IActionResult Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]HttpRequest req,
+            [Inject]IProductRepository productRepository,
+            ILogger log)
         {
-            var catalogContext = new CatalogContext();
-            var productRepository = new ProductRepository(catalogContext);
-
             var products = productRepository.GetProducts();
 
             var response = products.AsQueryable().Select(x => new CatalogProductViewModel

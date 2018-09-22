@@ -1,5 +1,8 @@
 ﻿using AdocicaMel.Catalog.Domain.Entities;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
+using System.IO;
+using Tag = AdocicaMel.Catalog.Domain.Entities.Tag;
 
 namespace AdocicaMel.Catalog.Infra.Context
 {
@@ -9,7 +12,13 @@ namespace AdocicaMel.Catalog.Infra.Context
 
         public CatalogContext()
         {
-            var clienteMongo = new MongoClient("mongodb://adocicamel-products:Dj7EEFWo0ZUc3UDSctabbKTTZnSsUWhsrmYsWGcGVcDiWhHaBIILA9s4eVOsKq5aIgncraFwovZt0Hh1wvabtA==@adocicamel-products.documents.azure.com:10255/?ssl=true&replicaSet=globaldb");
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+            
+            var clienteMongo = new MongoClient(config["ProductsCatalogDb"]);
 
             if (clienteMongo != null)
             {
@@ -19,5 +28,8 @@ namespace AdocicaMel.Catalog.Infra.Context
 
         public IMongoCollection<Product> Products
             => _database.GetCollection<Product>("products");
+
+        public IMongoCollection<Tag> Tags
+            => _database.GetCollection<Tag>("tags");
     }
 }

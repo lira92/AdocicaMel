@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdocicaMel.Core.Domain", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdocicaMel.Catalog.Infra", "src\AdocicaMel.Catalog.Infra\AdocicaMel.Catalog.Infra.csproj", "{2ED4572A-A780-43EE-B318-ECA2027D6A35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdocicaMel.Core.Infra.DI", "src\AdocicaMel.Core.Infra.DI\AdocicaMel.Core.Infra.DI.csproj", "{1622652A-F4ED-4C87-B00A-674EAFC3801C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdocicaMel.Core.Infra.DI", "src\AdocicaMel.Core.Infra.DI\AdocicaMel.Core.Infra.DI.csproj", "{1622652A-F4ED-4C87-B00A-674EAFC3801C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

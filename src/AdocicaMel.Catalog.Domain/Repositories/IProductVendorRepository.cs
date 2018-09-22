@@ -7,6 +7,7 @@ namespace AdocicaMel.Catalog.Domain.Repositories
 {
     public interface IProductVendorRepository
     {
-        ProductVendorData GetProductDataFromVendor(string vendor, string productIdentifier);
+        ProductVendorData GetProductDataFromVendor(string vendor,
+            string productIdentifier, string authorization);
     }
 }

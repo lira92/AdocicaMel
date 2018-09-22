@@ -24,9 +24,8 @@ namespace AdocicaMel.Catalog.Api
         [FunctionName("ImportarProdutos")]
         public static IActionResult Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]HttpRequest req,
-            [Inject]IProductRepository productRepository,
-            ILogger log,
-            ExecutionContext context
+            [Inject]ProductCommandHandler handler,
+            ILogger log
         )
         {
             string requestBody = new StreamReader(req.Body).ReadToEnd();
@@ -38,11 +37,9 @@ namespace AdocicaMel.Catalog.Api
                 return new BadRequestObjectResult("Dados inválidos");
             }
 
-            var productVendorRepository = new ProductVendorRepository(new VendorsApi(authorization));
-            var handler = new ProductCommandHandler(productVendorRepository, productRepository);
-
             try
             {
+                handler.Authorization = authorization;
                 handler.Handle(command);
                 return DefaultResponse(null, handler.Notifications);
             }
@@ -51,12 +48,6 @@ namespace AdocicaMel.Catalog.Api
                 log.LogError("Erro ao salvar produto", error);
                 return DefaultResponse(null, CreateNotificationsByMessage("error", "Ocorreu um erro ao importar o produto"));
             }
-
-            /*var config = new ConfigurationBuilder()
-                .SetBasePath(context.FunctionAppDirectory)
-                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();*/
         }
 
         public static IActionResult DefaultResponse(object result, IEnumerable<Notification> notifications)

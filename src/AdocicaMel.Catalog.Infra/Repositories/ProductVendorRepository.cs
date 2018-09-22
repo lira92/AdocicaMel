@@ -16,14 +16,15 @@ namespace AdocicaMel.Catalog.Infra.Repositories
             _vendorsApi = vendorsApi;
         }
 
-        public ProductVendorData GetProductDataFromVendor(string vendor, string productIdentifier)
+        public ProductVendorData GetProductDataFromVendor(string vendor, 
+            string productIdentifier, string authorization)
         {
             var request = new RestRequest
             {
                 Resource = $"vendors/{vendor}/products/{productIdentifier}"
             };
 
-            var response = _vendorsApi.Execute<ProductVendorResponseDto>(request);
+            var response = _vendorsApi.Execute<ProductVendorResponseDto>(request, authorization);
             if(response.StatusCode != HttpStatusCode.OK)
             {
                 return null;

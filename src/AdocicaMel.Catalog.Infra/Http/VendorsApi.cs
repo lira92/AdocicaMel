@@ -1,23 +1,29 @@
-﻿using RestSharp;
+﻿using Microsoft.Extensions.Configuration;
+using RestSharp;
 using System;
+using System.IO;
 
 namespace AdocicaMel.Catalog.Infra.Http
 {
     public class VendorsApi
     {
-        private readonly string _authorization;
-        const string BaseUrl = "https://adocicamel.azure-api.net/";
+        private readonly string _baseUrl;
 
-        public VendorsApi(string authorization)
+        public VendorsApi()
         {
-            _authorization = authorization;
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+            _baseUrl = config["VendorsApi"];
         }
 
-        public IRestResponse<T> Execute<T>(RestRequest request) where T : new()
+        public IRestResponse<T> Execute<T>(RestRequest request, string authorization) where T : new()
         {
             var client = new RestClient();
-            client.BaseUrl = new Uri(BaseUrl);
-            request.AddHeader("Authorization", _authorization);
+            client.BaseUrl = new Uri(_baseUrl);
+            request.AddHeader("Authorization", authorization);
 
             var response = client.Execute<T>(request);
 

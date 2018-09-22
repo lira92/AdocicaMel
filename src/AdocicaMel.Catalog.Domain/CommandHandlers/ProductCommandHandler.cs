@@ -1,4 +1,5 @@
 ﻿using AdocicaMel.Catalog.Domain.Commands;
+using AdocicaMel.Catalog.Domain.DomainServices;
 using AdocicaMel.Catalog.Domain.Entities;
 using AdocicaMel.Catalog.Domain.Repositories;
 using AdocicaMel.Catalog.Domain.ValueObjects;
@@ -12,13 +13,17 @@ namespace AdocicaMel.Catalog.Domain.CommandHandlers
     {
         private readonly IProductVendorRepository _productVendorRepository;
         private readonly IProductRepository _productRepository;
+        private readonly ITagService _tagService;
 
-        public ProductCommandHandler(IProductVendorRepository productVendorRepository,
-            IProductRepository productRepository)
+        public ProductCommandHandler(IProductVendorRepository productVendorRepository, 
+            IProductRepository productRepository, ITagService tagService)
         {
             _productVendorRepository = productVendorRepository;
             _productRepository = productRepository;
+            _tagService = tagService;
         }
+
+        public string Authorization { get; set; }
 
         public void Handle(ImportProductCommand command)
         {
@@ -40,7 +45,7 @@ namespace AdocicaMel.Catalog.Domain.CommandHandlers
             try
             {
                 productVendorData = _productVendorRepository
-                    .GetProductDataFromVendor(command.Vendor, command.ProductIdentifier);
+                    .GetProductDataFromVendor(command.Vendor, command.ProductIdentifier, Authorization);
 
                 if (productVendorData == null)
                 {
@@ -68,6 +73,8 @@ namespace AdocicaMel.Catalog.Domain.CommandHandlers
             {
                 return;
             }
+
+            _tagService.CreateTagIfNotExists(product.Tags);
 
             _productRepository.Create(product);
         }

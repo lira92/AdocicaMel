@@ -1,4 +1,5 @@
-﻿using AdocicaMel.Core.Domain.Pagination;
+﻿using AdocicaMel.Catalog.Domain.Enums;
+using AdocicaMel.Core.Domain.Pagination;
 
 namespace AdocicaMel.Catalog.Domain.Dto
 {
@@ -8,5 +9,6 @@ namespace AdocicaMel.Catalog.Domain.Dto
         public string[] Tags { get; set; }
         public int Page { get; set; } = PaginationDefaults.DEFAULT_PAGE;
         public int PageSize { get; set; } = PaginationDefaults.DEFAULT_PAGE_SIZE;
+        public SortingDefinition<ECatalogProductsSortingFields> Sort { get; set; }
     }
 }

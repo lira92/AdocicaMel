@@ -1,5 +1,6 @@
 using AdocicaMel.Catalog.Api.ViewModels;
 using AdocicaMel.Catalog.Domain.Dto;
+using AdocicaMel.Catalog.Domain.Enums;
 using AdocicaMel.Catalog.Domain.Repositories;
 using AdocicaMel.Core.Domain.Pagination;
 using AdocicaMel.Core.Infra.DI;
@@ -27,13 +28,15 @@ namespace AdocicaMel.Catalog.Api
             var tags = req.Query["tags"];
             var page = req.Query["page"];
             var pageSize = req.Query["pageSize"];
+            var sort = req.Query["sort"];
 
             var products = await productRepository.GetProducts(new CatalogProductParamsDto
             {
                 Name = name,
                 Tags = tags,
                 Page = string.IsNullOrEmpty(page) ? PaginationDefaults.DEFAULT_PAGE : Convert.ToInt32(page),
-                PageSize = string.IsNullOrEmpty(pageSize) ? PaginationDefaults.DEFAULT_PAGE_SIZE : Convert.ToInt32(pageSize)
+                PageSize = string.IsNullOrEmpty(pageSize) ? PaginationDefaults.DEFAULT_PAGE_SIZE : Convert.ToInt32(pageSize),
+                Sort = string.IsNullOrEmpty(sort) ? null : new SortingDefinition<ECatalogProductsSortingFields>(sort)
             });
 
             var response = products.Items.AsQueryable().Select(x => new CatalogProductViewModel

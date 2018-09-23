@@ -1,5 +1,6 @@
 ﻿using AdocicaMel.Catalog.Domain.Dto;
 using AdocicaMel.Catalog.Domain.Entities;
+using AdocicaMel.Catalog.Domain.Enums;
 using AdocicaMel.Catalog.Domain.Repositories;
 using AdocicaMel.Catalog.Infra.Context;
 using AdocicaMel.Core.Domain.Pagination;
@@ -52,6 +53,16 @@ namespace AdocicaMel.Catalog.Infra.Repositories
             var query = _context
                 .Products
                 .Find(filter);
+
+            if(param.Sort != null)
+            {
+                if(param.Sort.Field == ECatalogProductsSortingFields.Price)
+                {
+                    query = param.Sort.Order == ESortingOrder.ASC 
+                        ? query.SortBy(x => x.Price)
+                        : query.SortByDescending(x => x.Price);
+                }
+            }
 
             var total = await query.CountDocumentsAsync();
             var items = await query.Paginate(param.Page, param.PageSize).ToListAsync();

@@ -16,13 +16,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AdocicaMel.Catalog.Api
 {
     public static class ImportProductFunction
     {
         [FunctionName("ImportarProdutos")]
-        public static IActionResult Run(
+        public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]HttpRequest req,
             [Inject]ProductCommandHandler handler,
             ILogger log
@@ -40,7 +41,7 @@ namespace AdocicaMel.Catalog.Api
             try
             {
                 handler.Authorization = authorization;
-                handler.Handle(command);
+                await handler.Handle(command);
                 return DefaultResponse(null, handler.Notifications);
             }
             catch (Exception error)

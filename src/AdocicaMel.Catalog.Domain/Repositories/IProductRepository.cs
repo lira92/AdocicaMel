@@ -1,12 +1,15 @@
-﻿using AdocicaMel.Catalog.Domain.Entities;
+﻿using AdocicaMel.Catalog.Domain.Dto;
+using AdocicaMel.Catalog.Domain.Entities;
+using AdocicaMel.Core.Domain.Pagination;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AdocicaMel.Catalog.Domain.Repositories
 {
     public interface IProductRepository
     {
-        void Create(Product product);
-        IEnumerable<Product> GetProducts();
-        Product GetProductByVendorAndProductIdentifier(string vendor, string productIdentifier);
+        Task Create(Product product);
+        Task<PagedResult<Product>> GetProducts(CatalogProductParamsDto param);
+        Task<Product> GetProductByVendorAndProductIdentifier(string vendor, string productIdentifier);
     }
 }

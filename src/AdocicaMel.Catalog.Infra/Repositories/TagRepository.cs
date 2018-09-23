@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AdocicaMel.Catalog.Domain.Entities;
 using AdocicaMel.Catalog.Domain.Repositories;
 using AdocicaMel.Catalog.Infra.Context;
@@ -17,19 +18,19 @@ namespace AdocicaMel.Catalog.Infra.Repositories
             _context = context;
         }
 
-        public IEnumerable<Tag> GetTagsByName(IEnumerable<string> tagNames)
+        public async Task<IEnumerable<Tag>> GetTagsByName(IEnumerable<string> tagNames)
         {
             var filter = new FilterDefinitionBuilder<Tag>().Where(x => tagNames.Contains(x.Name));
 
-            return _context.Tags.FindSync(filter).ToList();
+            return await _context.Tags.FindSync(filter).ToListAsync();
         }
 
-        public void CreateManyTags(IEnumerable<Tag> tags)
+        public async Task CreateManyTags(IEnumerable<Tag> tags)
         {
-            _context.Tags.InsertMany(tags);
+            await _context.Tags.InsertManyAsync(tags);
         }
 
-        public IEnumerable<Tag> SearchTagsByName(string name)
+        public async Task<IEnumerable<Tag>> SearchTagsByName(string name)
         {
             var filter = new FilterDefinitionBuilder<Tag>().Empty;
 
@@ -38,7 +39,7 @@ namespace AdocicaMel.Catalog.Infra.Repositories
                 filter = new FilterDefinitionBuilder<Tag>().Where(x => x.Name.ToLower().Contains(name.ToLower()));
             }
 
-            return _context.Tags.FindSync(filter).ToList();
+            return await _context.Tags.FindSync(filter).ToListAsync();
         }
     }
 }

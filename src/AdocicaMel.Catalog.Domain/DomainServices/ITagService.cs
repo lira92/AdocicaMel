@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AdocicaMel.Catalog.Domain.DomainServices
 {
     public interface ITagService
     {
-        void CreateTagIfNotExists(IEnumerable<string> tags);
+        Task CreateTagIfNotExists(IEnumerable<string> tags);
     }
 }

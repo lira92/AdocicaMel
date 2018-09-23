@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace AdocicaMel.Catalog.Domain.DomainServices
 {
@@ -16,14 +17,14 @@ namespace AdocicaMel.Catalog.Domain.DomainServices
             _tagRepository = tagRepository;
         }
 
-        public void CreateTagIfNotExists(IEnumerable<string> tags)
+        public async Task CreateTagIfNotExists(IEnumerable<string> tags)
         {
-            var existingTags = _tagRepository.GetTagsByName(tags);
+            var existingTags = await _tagRepository.GetTagsByName(tags);
 
             var tagsToBeInserted = tags.Where(tagName => !existingTags.Any(x => x.Name == tagName))
                 .Select(tagName => new Tag(tagName));
 
-            _tagRepository.CreateManyTags(tagsToBeInserted);
+            await _tagRepository.CreateManyTags(tagsToBeInserted);
         }
     }
 }

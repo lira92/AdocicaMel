@@ -6,6 +6,7 @@ using AdocicaMel.Catalog.Domain.ValueObjects;
 using AdocicaMel.Core.Domain.Commands;
 using Flunt.Notifications;
 using System;
+using System.Threading.Tasks;
 
 namespace AdocicaMel.Catalog.Domain.CommandHandlers
 {
@@ -25,7 +26,7 @@ namespace AdocicaMel.Catalog.Domain.CommandHandlers
 
         public string Authorization { get; set; }
 
-        public void Handle(ImportProductCommand command)
+        public async Task Handle(ImportProductCommand command)
         {
             command.Validate();
             if(command.Invalid)
@@ -33,7 +34,7 @@ namespace AdocicaMel.Catalog.Domain.CommandHandlers
                 AddNotifications(command);
                 return;
             }
-            var productAlreadyImported = _productRepository.GetProductByVendorAndProductIdentifier(command.Vendor, command.ProductIdentifier);
+            var productAlreadyImported = await _productRepository.GetProductByVendorAndProductIdentifier(command.Vendor, command.ProductIdentifier);
 
             if(productAlreadyImported != null)
             {
@@ -74,9 +75,9 @@ namespace AdocicaMel.Catalog.Domain.CommandHandlers
                 return;
             }
 
-            _tagService.CreateTagIfNotExists(product.Tags);
+            await _tagService.CreateTagIfNotExists(product.Tags);
 
-            _productRepository.Create(product);
+            await _productRepository.Create(product);
         }
     }
 }

@@ -1,9 +1,13 @@
-﻿using AdocicaMel.Catalog.Domain.Entities;
+﻿using AdocicaMel.Catalog.Domain.Dto;
+using AdocicaMel.Catalog.Domain.Entities;
 using AdocicaMel.Catalog.Domain.Repositories;
 using AdocicaMel.Catalog.Infra.Context;
+using AdocicaMel.Core.Domain.Pagination;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AdocicaMel.Catalog.Infra.Repositories
 {
@@ -15,24 +19,44 @@ namespace AdocicaMel.Catalog.Infra.Repositories
         {
             _context = context;
         }
-        public void Create(Product product)
+        public async Task Create(Product product)
         {
-            _context.Products.InsertOne(product);
+            await _context.Products.InsertOneAsync(product);
         }
 
-        public Product GetProductByVendorAndProductIdentifier(string vendor, string productIdentifier)
+        public async Task<Product> GetProductByVendorAndProductIdentifier(string vendor, string productIdentifier)
         {
             var filter = new FilterDefinitionBuilder<Product>()
                 .Where(x => x.Vendor == vendor && x.ProductVendorIdentifier == productIdentifier);
 
-            return _context.Products.FindSync(filter).FirstOrDefault();
+            return await _context.Products.FindSync(filter).FirstOrDefaultAsync();
         }
 
-        public IEnumerable<Product> GetProducts()
+        public async Task<PagedResult<Product>> GetProducts(CatalogProductParamsDto param)
         {
             var filter = new FilterDefinitionBuilder<Product>().Empty;
 
-            return _context.Products.FindSync(filter).ToList();
+            if (!string.IsNullOrEmpty(param.Name))
+            {
+                var filterByName = new FilterDefinitionBuilder<Product>()
+                    .Where(x => x.ProductVendorData.ProductName.ToLower().Contains(param.Name.ToLower()));
+                filter = filter & filterByName;
+            }
+            if(param.Tags?.Length > 0)
+            {
+                var filterByTags = new FilterDefinitionBuilder<Product>()
+                    .Where(x => param.Tags.Any(tag => x.Tags.Contains(tag)));
+                filter = filter & filterByTags;
+            }
+
+            var query = _context
+                .Products
+                .Find(filter);
+
+            var total = await query.CountDocumentsAsync();
+            var items = await query.Paginate(param.Page, param.PageSize).ToListAsync();
+
+            return new PagedResult<Product>(items, total);
         }
     }
 }

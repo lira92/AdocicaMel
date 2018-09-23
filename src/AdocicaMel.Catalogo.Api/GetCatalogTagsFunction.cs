@@ -26,7 +26,7 @@ namespace AdocicaMel.Catalog.Api
         {
             string search = req.Query["tagName"];
 
-            var tags = tagRepository.SearchTagsByName(search);
+            var tags = await tagRepository.SearchTagsByName(search);
 
             var response = tags.AsQueryable().Select(x => new CatalogTagViewModel
             {

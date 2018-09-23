@@ -1,7 +1,9 @@
-﻿namespace AdocicaMel.Core.Domain.Commands
+﻿using System.Threading.Tasks;
+
+namespace AdocicaMel.Core.Domain.Commands
 {
     public interface ICommandHandler<T> where T : ICommand
     {
-        void Handle(T command);
+        Task Handle(T command);
     }
 }

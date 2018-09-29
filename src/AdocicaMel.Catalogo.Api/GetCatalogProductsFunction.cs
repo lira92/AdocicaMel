@@ -26,6 +26,10 @@ namespace AdocicaMel.Catalog.Api
         {
             var name = req.Query["name"];
             var tags = req.Query["tags"];
+            if (tags.Count == 1 && tags.ToString().Contains(","))
+            {
+                tags = tags.ToString().Split(',');
+            }
             var page = req.Query["page"];
             var pageSize = req.Query["pageSize"];
             var sort = req.Query["sort"];

@@ -33,7 +33,6 @@ namespace AdocicaMel.Catalog.Api
             var page = req.Query["page"];
             var pageSize = req.Query["pageSize"];
             var sort = req.Query["sort"];
-            log.LogInformation(string.Join("&",req.Query.Select(x => $"{x.Key}={x.Value}").ToArray()));
 
             var products = await productRepository.GetProducts(new CatalogProductParamsDto
             {

@@ -75,7 +75,7 @@ namespace AdocicaMel.Catalog.Domain.CommandHandlers
                 return;
             }
 
-            await _tagService.CreateTagIfNotExists(product.Tags);
+            // await _tagService.CreateTagIfNotExists(product.Tags);
 
             await _productRepository.Create(product);
         }
